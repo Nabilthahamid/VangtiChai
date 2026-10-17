@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="theme_button_size">48dp</dimen>
+    <dimen name="theme_icon_padding">12dp</dimen>
+    <dimen name="theme_icon_size">24dp</dimen>
+    <dimen name="zero">0dp</dimen>
+    <dimen name="screen_padding">16dp</dimen>
+    <dimen name="section_spacing">24dp</dimen>
+    <dimen name="key_spacing">4dp</dimen>
+    <dimen name="key_height">56dp</dimen>
+    <dimen name="key_text_size">20sp</dimen>
+    <dimen name="amount_text_size">32sp</dimen>
+    <dimen name="table_gap">8dp</dimen>
+    <dimen name="table_row_height">32dp</dimen>
+    <dimen name="table_text_size">16sp</dimen>
+    <dimen name="key_horizontal_padding">4dp</dimen>
+    <dimen name="key_min_width">0dp</dimen>
+</resources>

@@ -1,0 +1,25 @@
+<resources>
+    <string name="switch_to_dark">Switch to dark theme</string>
+    <string name="switch_to_light">Switch to light theme</string>
+    <string name="app_name">VangtiChai</string>
+    <string name="taka_label">Taka:</string>
+    <string name="note_header">Note</string>
+    <string name="count_header">Count</string>
+    <string name="note_500">500</string>
+    <string name="note_100">100</string>
+    <string name="note_50">50</string>
+    <string name="note_20">20</string>
+    <string name="note_10">10</string>
+    <string name="note_count_value">%1$d</string>
+    <string name="clear">Clear</string>
+    <string name="digit_0">0</string>
+    <string name="digit_1">1</string>
+    <string name="digit_2">2</string>
+    <string name="digit_3">3</string>
+    <string name="digit_4">4</string>
+    <string name="digit_5">5</string>
+    <string name="digit_6">6</string>
+    <string name="digit_7">7</string>
+    <string name="digit_8">8</string>
+    <string name="digit_9">9</string>
+</resources>

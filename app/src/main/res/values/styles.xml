@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ThemeToggle">
+        <item name="android:layout_width">@dimen/theme_button_size</item>
+        <item name="android:layout_height">@dimen/theme_button_size</item>
+        <item name="android:padding">@dimen/theme_icon_padding</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+    <style name="VangtiKey" parent="Widget.Material3.Button">
+        <item name="android:layout_width">@dimen/zero</item>
+        <item name="android:layout_height">@dimen/key_height</item>
+        <item name="android:layout_margin">@dimen/key_spacing</item>
+        <item name="android:textSize">@dimen/key_text_size</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:minWidth">@dimen/key_min_width</item>
+        <item name="android:paddingLeft">@dimen/key_horizontal_padding</item>
+        <item name="android:paddingRight">@dimen/key_horizontal_padding</item>
+    </style>
+    <style name="NoteCell">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/table_row_height</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/table_text_size</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+    <style name="NoteCountCell" parent="NoteCell">
+        <item name="android:gravity">end|center_vertical</item>
+    </style>
+</resources>
