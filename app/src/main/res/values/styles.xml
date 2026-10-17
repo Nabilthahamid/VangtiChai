@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ThemeToggle">
-        <item name="android:layout_width">@dimen/theme_button_size</item>
-        <item name="android:layout_height">@dimen/theme_button_size</item>
-        <item name="android:padding">@dimen/theme_icon_padding</item>
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
-    </style>
     <style name="VangtiKey" parent="Widget.Material3.Button">
         <item name="android:layout_width">@dimen/zero</item>
         <item name="android:layout_height">@dimen/key_height</item>

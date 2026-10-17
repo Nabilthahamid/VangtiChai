@@ -1,13 +1,10 @@
 package com.example.vangtichai
 
 import android.os.Bundle
-import android.content.res.Configuration
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.content.edit
 import com.example.vangtichai.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -15,30 +12,10 @@ class MainActivity : AppCompatActivity() {
     private var amount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val preferences = getSharedPreferences(THEME_PREFERENCES, MODE_PRIVATE)
-        delegate.localNightMode = preferences.getInt(
-            THEME_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-        )
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val isDark = resources.configuration.uiMode and
-            Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-        binding.buttonTheme.setImageResource(
-            if (isDark) R.drawable.ic_light_mode else R.drawable.ic_dark_mode
-        )
-        binding.buttonTheme.contentDescription = getString(
-            if (isDark) R.string.switch_to_light else R.string.switch_to_dark
-        )
-        binding.buttonTheme.setOnClickListener {
-            val mode = if (isDark) AppCompatDelegate.MODE_NIGHT_NO
-                else AppCompatDelegate.MODE_NIGHT_YES
-            preferences.edit { putInt(THEME_MODE, mode) }
-            // AppCompat recreates the Activity; saved instance state keeps the amount.
-            delegate.localNightMode = mode
-        }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { view, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -86,7 +63,5 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val STATE_AMOUNT = "entered_amount"
-        private const val THEME_PREFERENCES = "appearance"
-        private const val THEME_MODE = "night_mode"
     }
 }

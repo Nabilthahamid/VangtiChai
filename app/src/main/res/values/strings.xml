@@ -1,6 +1,4 @@
 <resources>
-    <string name="switch_to_dark">Switch to dark theme</string>
-    <string name="switch_to_light">Switch to light theme</string>
     <string name="app_name">VangtiChai</string>
     <string name="taka_label">Taka:</string>
     <string name="note_header">Note</string>

@@ -10,8 +10,7 @@ Features
 - Immediate updates to the amount and all eight note counts, including zeros.
 - Portrait layout with the note-count table to the left of the keypad.
 - Compact landscape layout with all controls visible at the tested 731x411dp screen size.
-- Amount restoration after rotation and theme changes.
-- Sun/moon button for light and dark appearance, with the selected theme saved across reopening.
+- Amount restoration after rotation.
 - System-bar insets, shared styles, string resources, and dimension resources.
 
 The amount starts at zero. Leading zeros do not accumulate. Input is limited to 999,999,999; further digits are ignored to prevent overflow and keep the display manageable.
@@ -92,10 +91,10 @@ Digit button -> AmountEntry -> updated amount
 
 | File | Responsibility |
 |---|---|
-| MainActivity.kt (app/src/main/java/com/example/vangtichai/MainActivity.kt) | Handles clicks, renders results, applies insets, restores state, and controls appearance. |
+| MainActivity.kt (app/src/main/java/com/example/vangtichai/MainActivity.kt) | Handles clicks, renders results, applies insets, and restores state. |
 | AmountEntry.kt (app/src/main/java/com/example/vangtichai/AmountEntry.kt) | Appends digits and checks the input limit before multiplication. |
 | ChangeCalculator.kt (app/src/main/java/com/example/vangtichai/ChangeCalculator.kt) | Calculates an ordered list of denomination/count pairs independently of Android views. |
-| Portrait layout (app/src/main/res/layout/activity_main.xml) | Amount header, note table, conventional four-row keypad, and theme icon. |
+| Portrait layout (app/src/main/res/layout/activity_main.xml) | Amount header, note table, and conventional four-row keypad. |
 | Landscape layout (app/src/main/res/layout-land/activity_main.xml) | Compact table beside a three-row keypad: 1-4, 5-8, then 9 / 0 / Clear. |
 | Default dimensions (app/src/main/res/values/sizes.xml) | Sizes, spacing, padding, text sizes, and match-constraint zero. |
 | Landscape dimensions (app/src/main/res/values-land/sizes.xml) | Compact overrides for the shorter screen. |
@@ -118,11 +117,39 @@ The amount is saved in onSaveInstanceState(), restored in onCreate(), and used t
 
 Appearance
 
-The app initially follows the device theme. Tapping the moon or sun saves an explicit choice in SharedPreferences and applies it through AppCompatDelegate.localNightMode. The Material DayNight theme supplies the corresponding colors.
-
-Theme switching recreates the Activity, so the same saved-state mechanism preserves the amount. The theme preference survives reopening; an amount is not promised to survive a force-stop/relaunch.
+The app follows the device's light or dark appearance through its Material DayNight theme. There is no in-app theme switch or saved appearance override.
 
 Verification record
+
+Full revalidation after removing the in-app theme toggle (2026-10-17):
+
+- Command: .\gradlew.bat testDebugUnitTest lintDebug assembleDebug --rerun-tasks
+  Result: BUILD SUCCESSFUL; all 52 actionable tasks executed.
+- All 13 unit tests passed. Lint: zero errors and the existing single
+  empty-values-v23 warning.
+- Command: .\gradlew.bat connectedDebugAndroidTest
+  Result: BUILD SUCCESSFUL. The existing app-context instrumentation
+  test passed once on each connected emulator (two executions, no
+  failures/errors). This test does not verify screen appearance.
+- Pixel_10_Pro_XL_2: Android 17/API 37, native 1344x2992px at 480dpi.
+- Pixel_Tablet: Android 15/API 35, native 2560x1600px at 320dpi.
+- Both profiles passed the full runtime sequence in native portrait and
+  landscape and at each of four separate 160dpi display overrides:
+  411x731dp, 731x411dp, 800x1280dp and 1280x800dp.
+- All 12 configurations passed initial zero, 2 -> 23 -> 234, 786, 500,
+  Clear, leading zeros, maximum/excess input, rotation in both
+  directions, and continued input after rotation.
+- The removed theme icon was absent throughout. All required views were
+  visible without scrolling. All 12 maximum-input screenshots were
+  visually inspected: no overlap, clipped numbers or system-bar coverage.
+- Both emulators' native size/density and free rotation were restored.
+- Logs: app/build/reports/runtime-all-phone.txt and runtime-all-tablet.txt.
+  Screenshots: app/build/reports/runtime-all-phone/ and runtime-all-tablet/.
+  Device-test report: app/build/reports/androidTests/connected/debug/index.html.
+- Actual Pixel XL and Nexus 10 profiles remain unavailable and NOT TESTED;
+  the similarly sized overrides and other profiles are not substitutes.
+- These checks required no further changes to application code. Local
+  test sources/scripts and generated reports remain excluded from Git.
 
 Documentation reviewed on 2026-10-17. The following summarizes checks actually performed; a passing build is not treated as proof of visual correctness.
 
@@ -139,9 +166,7 @@ Actual emulator profiles
 | Actual profile | Android | Native screen configuration | Result |
 |---|---|---|---|
 | Pixel 10 Pro XL (Pixel_10_Pro_XL, Pixel_10_Pro_XL_2) | Android 17 / API 37 | 1344x2992px, 480dpi; about 448x997dp portrait and the rotated equivalent | Input, counts, Clear, rotation, limits, and visual checks passed in both orientations. |
-| Pixel Tablet (Pixel_Tablet) | Android 15 / API 35 | 2560x1600px, 320dpi; 800x1280dp portrait and 1280x800dp landscape | Full core runtime sequence and visual checks passed in both orientations before the theme icon was added. |
-
-The theme icon was subsequently tested on Pixel 10 Pro XL: switching both ways preserved amounts/counts, the choice survived reopening, rotation worked, and Clear reset the results. The updated theme icon has not been runtime-tested on Pixel Tablet.
+| Pixel Tablet (Pixel_Tablet) | Android 15 / API 35 | 2560x1600px, 320dpi; 800x1280dp portrait and 1280x800dp landscape | Full core runtime sequence and visual checks passed in both orientations. |
 
 Display overrides - separate from hardware-profile tests
 
@@ -155,8 +180,6 @@ All four logical screen sizes below passed the full core runtime sequence using 
 | 1280x800dp | Landscape | PASS |
 
 Screenshots were inspected at maximum input for clipping, overlap, missing controls, and system-bar coverage at default font size. These sizes describe the full display before insets.
-
-After the theme icon was added, 411x731dp and 731x411dp were rechecked on Pixel 10 Pro XL, including theme changes at maximum input. Both passed.
 
 Remaining verification
 
@@ -178,8 +201,7 @@ Run the app on a connected device or emulator, then follow this sequence. The AD
 4. Enter 786, rotate both ways, then append 2; expect 7862.
 5. Verify 500 and Clear.
 6. Enter 007; expect 7. Enter nine 9s, then another digit; expect 999999999.
-7. Switch themes, check preserved results, and reopen to check the saved theme.
-8. Inspect every row/button for clipping, overlap, and system-bar coverage.
+7. Inspect every row/button for clipping, overlap, and system-bar coverage.
 
 To create the remaining profiles, open Tools -> Device Manager -> + -> Create Virtual Device. Select Phone -> Pixel XL or Tablet -> Nexus 10, choose a compatible system image, and finish setup. Run the sequence above in both orientations and record the actual profile, Android version, size, density, and result.
 

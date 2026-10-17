@@ -23,26 +23,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/button_theme"
-                style="@style/ThemeToggle"
-                android:contentDescription="@string/switch_to_dark"
-                app:srcCompat="@drawable/ic_dark_mode"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
             <TextView
                 android:id="@+id/amount_value"
                 android:layout_width="@dimen/zero"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/key_spacing"
-                android:layout_marginEnd="@dimen/key_spacing"
                 android:text="@string/digit_0"
                 android:textSize="@dimen/amount_text_size"
                 android:textColor="?attr/colorOnSurface"
                 android:gravity="end"
                 app:layout_constraintStart_toEndOf="@id/amount_label"
-                app:layout_constraintEnd_toStartOf="@id/button_theme"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBaseline_toBaselineOf="@id/amount_label" />
 
 
