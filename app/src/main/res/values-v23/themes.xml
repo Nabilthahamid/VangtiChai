@@ -1,0 +1,8 @@
+<resources>
+    <!-- Dark status-bar icons are available starting with Android 6.0. -->
+    <style name="Theme.VangtiChai" parent="Base.Theme.VangtiChai">
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+    </style>
+</resources>

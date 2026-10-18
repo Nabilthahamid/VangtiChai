@@ -38,13 +38,17 @@ Technology and configuration
 | Language | Kotlin |
 | Interface | XML Views, ConstraintLayout, Material components |
 | View access | View Binding |
-| Minimum SDK | API 24 |
+| Minimum SDK | API 21 (Android 5.0 Lollipop) |
 | Compile / target SDK | API 37 |
 | Android Gradle Plugin | 9.4.1 |
 | Gradle wrapper | 9.6.0 |
 | Gradle daemon JVM toolchain | Java 25 |
+| AndroidX Core KTX | 1.16.0 |
+| AndroidX Activity KTX | 1.10.1 |
+| AndroidX AppCompat | 1.7.1 |
+| Material Components | 1.13.0 |
 
-The Java 25 daemon setting comes from gradle/gradle-daemon-jvm.properties; the app's Java source/target compatibility is configured as Java 11. API 21 is suggested by the assignment, but this project's existing API 24 minimum was preserved.
+The Java 25 daemon setting comes from gradle/gradle-daemon-jvm.properties; the app's Java source/target compatibility is configured as Java 11. The minimum SDK is API 21 to match the assignment's suggested Android 5.0 baseline. Core, Activity, AppCompat and Material use API-21-compatible versions because their previously selected newer releases require API 23. ConstraintLayout, Gradle, AGP and the compile/target SDK were retained.
 
 Open and run
 
@@ -52,7 +56,7 @@ Open and run
 2. In Android Studio, choose File -> Open and select the repository root.
 3. Ensure Android SDK Platform 37 is installed and the SDK location is configured for your machine.
 4. Allow Gradle sync and any required toolchain/dependency downloads to finish.
-5. Select an emulator or connected Android device running API 24 or newer, then click Run.
+5. Select an emulator or connected Android device running API 21 or newer, then click Run.
 
 SDK paths belong in the local, ignored local.properties file. The original development environment used D:\Android\Sdk and D:\Android\Gradle; other machines can use their own locations.
 
@@ -67,7 +71,7 @@ From the project root in Windows PowerShell:
 
 The test task runs the local tests when their sources are present. To build and inspect a fresh clone:
 
-.\\gradlew.bat lintDebug assembleDebug
+.\gradlew.bat lintDebug assembleDebug
 
 To execute the development checks again instead of reusing up-to-date results:
 
@@ -121,6 +125,20 @@ The app follows the device's light or dark appearance through its Material DayNi
 
 Verification record
 
+API 21 compatibility update (2026-10-18)
+
+- minSdk changed to 21; compile/target SDK remains 37.
+- The debug APK was inspected with AAPT: sdkVersion: 21, targetSdkVersion: 37.
+- All 44 merged dependency manifests were inspected; none requires a minimum above API 21. No manifest override was used to bypass compatibility.
+- testDebugUnitTest lintDebug assembleDebug passed, including all 13 local unit tests. The local instrumentation-test APK also built with assembleDebugAndroidTest.
+- The API-23-only windowLightStatusBar setting lives in values-v23/themes.xml; API 21/22 use the base theme.
+- The updated build passed the full core runtime sequence on Pixel Tablet, Android 15/API 35, in native portrait and landscape.
+- Pixel 10 Pro XL (Android 17/API 37) installed the same APK, verified by SHA-256, but Android's package-update overlay blocked launch. Runtime verification on that profile was not completed for this dependency update. Only blocked ADB test clients were stopped; the emulator remained running.
+- Android 5.0/API 21 runtime: NOT TESTED. No API 21 system image or emulator is installed. Build metadata and lint checks do not establish runtime correctness on Lollipop.
+- To verify Lollipop, create an API 21 AVD in Device Manager, install the generated debug APK and run the manual sequence below. Record the actual device/profile and results afterward.
+
+The following earlier records describe checks performed before the API 21 dependency update.
+
 Full revalidation after removing the in-app theme toggle (2026-10-17):
 
 - Command: .\gradlew.bat testDebugUnitTest lintDebug assembleDebug --rerun-tasks
@@ -151,7 +169,7 @@ Full revalidation after removing the in-app theme toggle (2026-10-17):
 - These checks required no further changes to application code. Local
   test sources/scripts and generated reports remain excluded from Git.
 
-Documentation reviewed on 2026-10-17. The following summarizes checks actually performed; a passing build is not treated as proof of visual correctness.
+Documentation reviewed on 2026-10-18. The following summarizes checks actually performed; a passing build is not treated as proof of visual correctness.
 
 Build and unit tests
 
@@ -159,7 +177,7 @@ Build and unit tests
 - 13 unit tests passed: five input tests, seven calculation tests, and one starter test.
 - Coverage includes 234, 786, zero, exact denominations, maximum input, leading zeros, invalid inputs, and reconstruction of amounts 0-2000.
 - The latest standard build/test/lint command also succeeded, reusing up-to-date outputs where applicable.
-- Lint reported zero errors and one warning for the empty values-v23 folder. Its former theme resources were merged into the default theme. Empty directories are not tracked by Git, so this local warning may not occur in a fresh clone.
+- With the API 21 dependencies, lint reports zero errors and four dependency-update warnings. The newer suggested releases require API 23, so the compatible versions are intentional. The earlier empty-folder warning is resolved: values-v23/themes.xml now contains the API-23-only light status-bar icon setting.
 
 Actual emulator profiles
 
